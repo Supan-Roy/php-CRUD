@@ -1,14 +1,19 @@
 <?php
   include "connection.php";
-  if (isset($_POST['submit'])) {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
-    $q = "INSERT INTO `employee`(`name`, `email`, `phone`) VALUES ('$name', '$email', '$phone')";
-    $query = mysqli_query($conn, $q);
-    if ($query) {
+    $join_date = $_POST['join_date'];
+
+    $sql = "INSERT INTO employee (name, email, phone, join_date) VALUES ('$name', '$email', '$phone', '$join_date')";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
       header("Location: index.php");
       exit();
+    } else {
+      echo "<script>alert('Failed to insert employee!');</script>";
     }
   }
 ?>
@@ -16,9 +21,13 @@
 <html lang="en">
 <head>
   <title>Add New Employee</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
   <style>
     body {
       background-color: #f1f3f5;
@@ -61,26 +70,30 @@
   </div>
 </nav>
 
-<!-- Form Card -->
+<!-- Form -->
 <div class="container">
   <div class="container-box col-md-8 mx-auto">
     <h2 class="text-center mb-4">Create New Employee</h2>
-    <form method="POST">
+    <form method="POST" autocomplete="off">
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" name="name" required class="form-control" id="name">
+        <input type="text" name="name" class="form-control" id="name" required>
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" name="email" required class="form-control" id="email">
+        <input type="email" name="email" class="form-control" id="email" required>
       </div>
       <div class="form-group">
         <label for="phone">Phone</label>
-        <input type="text" name="phone" required class="form-control" id="phone">
+        <input type="text" name="phone" class="form-control" id="phone" required>
+      </div>
+      <div class="form-group">
+        <label for="join_date">Joining Date</label>
+        <input type="text" name="join_date" id="join_date" class="form-control" required>
       </div>
       <div class="text-center">
-        <button class="btn btn-success px-4 mr-2" type="submit" name="submit">Submit</button>
-        <a class="btn btn-secondary px-4" href="index.php">Cancel</a>
+        <button type="submit" name="submit" class="btn btn-success px-4 mr-2">Submit</button>
+        <a href="index.php" class="btn btn-secondary px-4">Cancel</a>
       </div>
     </form>
   </div>
@@ -89,5 +102,13 @@
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  flatpickr("#join_date", {
+    dateFormat: "Y-m-d",
+    maxDate: "today"
+  });
+</script>
+
 </body>
 </html>
