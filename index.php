@@ -82,16 +82,17 @@
           while($row = $result->fetch_assoc()) {
             echo "
             <tr>
-              <td>$row[id]</td>
-              <td>$row[name]</td>
-              <td>$row[email]</td>
-              <td>$row[phone]</td>
-              <td>$row[join_date]</td>
-              <td>
-                <a class='btn btn-success btn-sm' href='update.php?id=$row[id]'>Edit</a>
-                <a class='btn btn-danger btn-sm' href='delete.php?id=$row[id]'>Delete</a>
-              </td>
-            </tr>
+  <th>{$row['id']}</th>
+  <td>{$row['name']}</td>
+  <td>{$row['email']}</td>
+  <td>{$row['phone']}</td>
+  <td>{$row['join_date']}</td>
+  <td>
+       <a class='btn btn-success' href='update.php?id={$row['id']}'>Edit</a>
+       <a class='btn btn-danger' href='javascript:void(0);' onclick='confirmDelete({$row["id"]});'>Delete</a>
+
+  </td>
+</tr>
             ";
           }
           ?>
@@ -103,5 +104,31 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="confirmDelete.js"></script>
+
+    <!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-light text-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this employee?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <a id="confirmDeleteBtn" class="btn btn-danger">Yes, Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   </body>
 </html>
