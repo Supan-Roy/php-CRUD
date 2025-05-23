@@ -4,7 +4,7 @@
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
-    $q = "INSERT INTO `crud2`(`name`, `email`, `phone`) VALUES ('$name', '$email', '$phone')";
+    $q = "INSERT INTO `employee`(`name`, `email`, `phone`) VALUES ('$name', '$email', '$phone')";
     $query = mysqli_query($conn, $q);
     if ($query) {
       header("Location: index.php");
