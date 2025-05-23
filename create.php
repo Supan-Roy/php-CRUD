@@ -4,7 +4,7 @@
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
-    $join_date = $_POST['join_date'];
+    $join_date = empty($_POST['join_date']) ? date('Y-m-d') : $_POST['join_date'];
 
     $sql = "INSERT INTO employee (name, email, phone, join_date) VALUES ('$name', '$email', '$phone', '$join_date')";
     $result = mysqli_query($conn, $sql);
@@ -89,7 +89,7 @@
       </div>
       <div class="form-group">
         <label for="join_date">Joining Date</label>
-        <input type="text" name="join_date" id="join_date" class="form-control" required>
+        <input type="date" class="form-control" id="join_date" name="join_date">
       </div>
       <div class="text-center">
         <button type="submit" name="submit" class="btn btn-success px-4 mr-2">Submit</button>
