@@ -55,7 +55,7 @@
     <div class="container">
       <div class="container-box">
         <h2 class="mb-4 text-center">Welcome to Employee Management System</h2>
-        <p class="text-center">Manage your employees efficiently with PHP and MySQL</p>
+        <p class="text-center">Developed by SR Group of Industries</p>
       </div>
     </div>
 
