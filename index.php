@@ -44,7 +44,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <a class="navbar-brand text-white font-weight-bold" href="#">Employee Management System</a>
+        <a class="navbar-brand text-white font-weight-bold" href="#">SR Group of Industries</a>
         <div class="ml-auto">
           <a href="index.php" class="btn btn-outline-light mr-2">Home</a>
           <a href="create.php" class="btn btn-light">Add New</a>
@@ -55,7 +55,7 @@
     <div class="container">
       <div class="container-box">
         <h2 class="mb-4 text-center">Welcome to Employee Management System</h2>
-        <p class="text-center">Developed by SR Group of Industries</p>
+        <p class="text-center">Developed by Supan Roy</p>
       </div>
     </div>
 
