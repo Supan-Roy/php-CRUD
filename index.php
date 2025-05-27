@@ -82,11 +82,11 @@
           while($row = $result->fetch_assoc()) {
             echo "
             <tr>
-  <th>{$row['id']}</th>
-  <td>{$row['name']}</td>
-  <td>{$row['email']}</td>
-  <td>{$row['phone']}</td>
-  <td>{$row['join_date']}</td>
+            <th>{$row['id']}</th>
+            <td>{$row['name']}</td>
+            <td>{$row['email']}</td>
+            <td>{$row['phone']}</td>
+            <td>{$row['join_date']}</td>
   <td>
        <a class='btn btn-success' href='edit.php?id={$row['id']}'>Edit</a>
        <a class='btn btn-danger' href='javascript:void(0);' onclick='confirmDelete({$row["id"]});'>Delete</a>
