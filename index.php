@@ -1,3 +1,29 @@
+<?php
+include "connection.php";
+
+// Defaults
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 20;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+if ($limit < 1) $limit = 20;
+if ($page < 1) $page = 1;
+
+// Offset calculation
+$offset = ($page - 1) * $limit;
+
+// Get total records
+$total_query = "SELECT COUNT(*) as total FROM employee";
+$total_result = $conn->query($total_query);
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
+
+// Fetch limited records
+$sql = "SELECT * FROM employee ORDER BY id ASC LIMIT $limit OFFSET $offset";
+$result = $conn->query($sql);
+?>
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -60,45 +86,79 @@
     </div>
 
     <div class="container my-4">
-      <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
+  <div class="d-flex justify-content-between mb-3">
+    <form method="get" class="form-inline">
+      <label class="mr-2 font-weight-bold">View:</label>
+      <select name="limit" class="form-control mr-2" onchange="this.form.submit()">
+        <option value="20" <?= $limit == 20 ? 'selected' : '' ?>>20</option>
+        <option value="50" <?= $limit == 50 ? 'selected' : '' ?>>50</option>
+        <option value="100" <?= $limit == 100 ? 'selected' : '' ?>>100</option>
+        <option value="1000" <?= $limit == 1000 ? 'selected' : '' ?>>1000</option>
+      </select>
+      <input type="hidden" name="page" value="1">
+    </form>
+    <div><strong>Total Employees:</strong> <?= $total_records ?></div>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Employee ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Joining Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          echo "
           <tr>
-            <th>Employee ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Joining Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php  
-          include "connection.php";
-          $sql = "SELECT * FROM employee";
-          $result = $conn->query($sql);
-          if(!$result) {
-            die("Invalid query!");
-          }
-          while($row = $result->fetch_assoc()) {
-            echo "
-            <tr>
             <th>{$row['id']}</th>
             <td>{$row['name']}</td>
             <td>{$row['email']}</td>
             <td>{$row['phone']}</td>
             <td>{$row['join_date']}</td>
-  <td>
-       <a class='btn btn-success' href='edit.php?id={$row['id']}'>Edit</a>
-       <a class='btn btn-danger' href='javascript:void(0);' onclick='confirmDelete({$row["id"]});'>Delete</a>
+            <td>
+              <a class='btn btn-success' href='edit.php?id={$row['id']}'>Edit</a>
+              <a class='btn btn-danger' href='javascript:void(0);' onclick='confirmDelete({$row["id"]});'>Delete</a>
+            </td>
+          </tr>";
+        }
+      } else {
+        echo "<tr><td colspan='6' class='text-center'>No records found.</td></tr>";
+      }
+      ?>
+    </tbody>
+  </table>
 
-  </td>
-</tr>
-            ";
-          }
-          ?>
-        </tbody>
-      </table>
-    </div>
+  <!-- Pagination -->
+  <nav>
+    <ul class="pagination justify-content-center">
+      <?php if ($page > 1): ?>
+        <li class="page-item">
+          <a class="page-link" href="?limit=<?= $limit ?>&page=<?= $page - 1 ?>">Previous</a>
+        </li>
+      <?php endif; ?>
+
+      <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+          <a class="page-link" href="?limit=<?= $limit ?>&page=<?= $i ?>"><?= $i ?></a>
+        </li>
+      <?php endfor; ?>
+
+      <?php if ($page < $total_pages): ?>
+        <li class="page-item">
+          <a class="page-link" href="?limit=<?= $limit ?>&page=<?= $page + 1 ?>">Next</a>
+        </li>
+      <?php endif; ?>
+    </ul>
+  </nav>
+</div>
+
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
@@ -128,7 +188,5 @@
     </div>
   </div>
 </div>
-
-
   </body>
 </html>
